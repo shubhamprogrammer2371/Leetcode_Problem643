@@ -1,0 +1,55 @@
+double findMaxAverage(int* nums, int numsSize, int k){
+    double sum = 0.0 ,result = 0.0;
+    for (int index = 0; index < k; index++)
+        sum += (double) nums[index];
+    result = sum;
+    for (int index = k; index < numsSize; index++) 
+    {
+        sum += nums[index] - nums[index - k];
+        result = fmax(result,sum);
+    }
+    return (result / k);
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+double findMaxAverage(int* nums, int numsSize, int k){
+    int window_start_idx = 0 , window_end_idx = (k - 1); /* Set window start as i = 0, and end as i = k */
+    double sum = 0, max_sum = 0;
+    while (window_end_idx <= (numsSize-1))
+    {
+        if (!window_start_idx) /* For the first window, linearly sum all K elements and record the sum */
+            for (int i = window_start_idx; i <= window_end_idx; i++) 
+                max_sum = sum += nums[i];
+        else
+        {
+            sum -= nums[window_start_idx - 1]; /* For all future windows, simply subtract the removed value from sum and add the newly added value. Keep track of the maximum overall sum */
+            sum += nums[window_end_idx];
+            max_sum = fmax(sum,max_sum);
+        }
+        window_start_idx++;
+        window_end_idx++;
+    }
+    return (max_sum / k);
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+double findMaxAverage(int* nums, int numsSize, int k){
+    int right = k , max = 0; // temp border , max value
+    for (int i = 0 ; i < k ; i++) // searching sum for first k elements
+        max += nums[i];
+    int tmp = max; // temp value
+    while (right < numsSize) // move right border until it reach the border of array
+    {
+        tmp += nums[right]; // add new element
+        tmp -= nums[right - k]; // sub [right - k] element
+        max = fmax(max,tmp); // check new value
+        right++; // move border
+    }
+    return (double)max/k;
+}
